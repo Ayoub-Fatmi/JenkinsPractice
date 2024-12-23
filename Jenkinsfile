@@ -43,6 +43,7 @@ pipeline {
 //                 }
 //             }
 //         }
+
         stage('Push Docker Image to DockerHub') {
             steps {
                 script {
@@ -53,28 +54,28 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to Server') {
-            steps {
-                script {
-                    echo 'Deploying to server...'
-
-                    // Use the SSH credentials to log in to the server and deploy the Docker container
-                    sshagent(['deploy-ssh-credentials']) {
-                        // Run SSH commands on your Linux server from Windows Jenkins
-                        bat 'ssh root@49.13.229.11 "docker pull fatmiayoub17/calculator:latest"'
-
-                        // Stop any running container (if needed)
-                        bat 'ssh root@49.13.229.11 "docker stop calculator || true"'
-
-                        // Remove the old container (if needed)
-                        bat 'ssh root@49.13.229.11 "docker rm calculator || true"'
-
-                        // Run the new container on the server
-                        bat 'ssh root@49.13.229.11 "docker run -d -p 8080:8080 --name calculator fatmiayoub17/calculator:latest"'
-                    }
-                }
-            }
-        }
+//         stage('Deploy to Server') {
+//             steps {
+//                 script {
+//                     echo 'Deploying to server...'
+//
+//                     // Use the SSH credentials to log in to the server and deploy the Docker container
+//                     sshagent(['deploy-ssh-credentials']) {
+//                         // Run SSH commands on your Linux server from Windows Jenkins
+//                         bat 'ssh root@49.13.229.11 "docker pull fatmiayoub17/calculator:latest"'
+//
+//                         // Stop any running container (if needed)
+//                         bat 'ssh root@49.13.229.11 "docker stop calculator || true"'
+//
+//                         // Remove the old container (if needed)
+//                         bat 'ssh root@49.13.229.11 "docker rm calculator || true"'
+//
+//                         // Run the new container on the server
+//                         bat 'ssh root@49.13.229.11 "docker run -d -p 8080:8080 --name calculator fatmiayoub17/calculator:latest"'
+//                     }
+//                 }
+//             }
+//         }
 
     }
 
