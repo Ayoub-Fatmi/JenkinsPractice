@@ -51,20 +51,17 @@ pipeline {
                 script {
                     echo 'Deploying to server...'
 
-                    // Create the remote connection using the Jenkins SSH credentials
+                    // Define the remote server connection using SSH credentials from Jenkins
                     def remote = [:]
                     remote.name = 'remote-server'
                     remote.host = REMOTE_HOST
                     remote.user = REMOTE_USER
                     remote.credentialsId = SSH_CREDENTIALS_ID
-                    remote.allowAnyHosts = true
+                    remote.allowAnyHosts = true  // Allow connecting to unknown hosts
 
-                    // Run SSH commands
+                    // Execute the remote commands via sshCommand
                     sshCommand remote: remote, command: 'echo hello'
-                    sshCommand remote: remote, command: 'ls'
-
-                    // You can add more commands here if needed
-//                     sshCommand remote: remote, command: 'docker pull fatmiayoub17/jenkinstp:latest && docker run -d -p 8080:8080 fatmiayoub17/jenkinstp:latest'
+                    sshCommand remote: remote, command: 'docker pull fatmiayoub17/jenkinstp:latest && docker run -d -p 8080:8080 fatmiayoub17/jenkinstp:latest'
                 }
             }
         }
