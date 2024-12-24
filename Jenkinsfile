@@ -73,13 +73,12 @@ pipeline {
                 script {
                     echo 'Deploying to server...'
 
-                    // Using PowerShell to SSH into the server and deploy the Docker container
-                    bat '''
-                        echo "Deploying Docker container on the server..."
-
-                        // SSH into the server and deploy the container
-                        powershell -Command "ssh %SERVER_USER%@%SERVER_IP% 'docker pull %DOCKER_IMAGE% && docker run -d -p 8080:8080 %DOCKER_IMAGE%'"
-                    '''
+                    sshagent(credentials: [SSH_CREDENTIALS_ID]) {
+                        bat '''
+                            echo "Deploying Docker container on the server..."
+                            powershell -Command "ssh %SERVER_USER%@%SERVER_IP% 'docker pull %DOCKER_IMAGE% && docker run -d -p 8080:8080 %DOCKER_IMAGE%'"
+                        '''
+                    }
                 }
             }
         }
