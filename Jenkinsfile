@@ -68,7 +68,7 @@ pipeline {
                     echo 'Deploying to server...'
 
                     // Use withCredentials to directly inject the private key
-                    withCredentials([sshUserPrivateKey(credentialsId: 'SSH_CREDENTIALS_ID', keyFileVariable: 'SSH_KEY')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'Deploy-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         bat '''
                             echo "Deploying Docker container on the server..."
 
