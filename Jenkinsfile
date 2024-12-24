@@ -62,6 +62,25 @@ pipeline {
 //             }
 //         }
 //     }
+
+//     stage('Hello to Server') {
+//         steps {
+//             script {
+//                 echo 'Deploying to server...'
+//
+//                 // Use withCredentials to directly inject the private key
+//                 withCredentials([sshUserPrivateKey(credentialsId: 'SSH_CREDENTIALS_ID', keyFileVariable: 'SSH_KEY')]) {
+//                     echo "SSH Key Path: $env:SSH_KEY"
+//
+//                     bat '''
+//                         echo "Deploying Docker container on the server..."
+//                         // Add the StrictHostKeyChecking=no option to skip host verification
+//                         powershell -Command "ssh -o StrictHostKeyChecking=no -i $env:SSH_KEY root@49.13.218.22 'docker pull fatmiayoub17/jenkinstp:latest && docker run -d -p 8080:8080 fatmiayoub17/jenkinstp:latest'"
+//                     '''
+//                 }
+//             }
+//         }
+//     }
     stage('Hello to Server') {
         steps {
             script {
@@ -76,7 +95,7 @@ pipeline {
                 // Run the SSH command directly using the private key path
                 bat '''
                     echo "Deploying Docker container on the server..."
-                    powershell -Command "ssh -vvv -i C:\\Users\\Administrator\\.ssh\\id_rsa root@49.13.218.22 'echo hello'"
+                    powershell -Command "ssh -o StrictHostKeyChecking=no -vvv -i C:\\Users\\Administrator\\.ssh\\id_rsa root@49.13.218.22 'echo hello'"
                 '''
             }
         }
