@@ -67,10 +67,10 @@ pipeline {
                 script {
                     echo 'Deploying to server...'
 
-                    // Use withCredentials to directly inject the private key
                     withCredentials([sshUserPrivateKey(credentialsId: 'Deploy-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                         bat '''
                             echo "Deploying Docker container on the server..."
+                            echo "SSH Key Path: $env:SSH_KEY"
 
                             // Use the private key to authenticate using ssh
                             powershell -Command "ssh -i $env:SSH_KEY %SERVER_USER%@%SERVER_IP% 'docker pull %DOCKER_IMAGE% && docker run -d -p 8080:8080 %DOCKER_IMAGE%'"
