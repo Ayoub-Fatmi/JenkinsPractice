@@ -46,24 +46,28 @@ pipeline {
                 }
             }
         }
-    stage('Hello to Server') {
-        steps {
-            script {
-                echo 'Deploying to server...'
+        stage('Hello to Server') {
+            steps {
+                script {
+                    echo 'Deploying to server...'
 
-                def SSH_KEY = 'C:\\Users\\Administrator\\.ssh\\id_rsa'
+                    // Create the remote connection using the Jenkins SSH credentials
+                    def remote = [:]
+                    remote.name = 'remote-server'
+                    remote.host = REMOTE_HOST
+                    remote.user = REMOTE_USER
+                    remote.credentialsId = SSH_CREDENTIALS_ID
+                    remote.allowAnyHosts = true
 
-                echo "SSH Key Path: $SSH_KEY"
+                    // Run SSH commands
+                    sshCommand remote: remote, command: 'echo hello'
+                    sshCommand remote: remote, command: 'ls'
 
-                withCredentials([sshUserPrivateKey(credentialsId: 'Deploy-ssh-key', keyFileVariable: 'SSH_KEY')]) {
-                    bat """
-                        echo "Deploying Docker container on the server..."
-                        powershell -Command "ssh -vvv -o StrictHostKeyChecking=no root@49.13.218.22 'echo hello'"
-                    """
+                    // You can add more commands here if needed
+//                     sshCommand remote: remote, command: 'docker pull fatmiayoub17/jenkinstp:latest && docker run -d -p 8080:8080 fatmiayoub17/jenkinstp:latest'
                 }
             }
         }
-    }
 
     stage('Deploy to Server') {
         steps {
