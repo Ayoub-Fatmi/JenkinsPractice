@@ -58,12 +58,13 @@ pipeline {
                 withCredentials([sshUserPrivateKey(credentialsId: 'Deploy-ssh-key', keyFileVariable: 'SSH_KEY')]) {
                     bat """
                         echo "Deploying Docker container on the server..."
-                        powershell -Command "ssh -o StrictHostKeyChecking=no -i ${SSH_KEY} root@49.13.218.22 'echo hello'"
+                        powershell -Command "ssh -o StrictHostKeyChecking=no root@49.13.218.22 'echo hello'"
                     """
                 }
             }
         }
     }
+
     stage('Deploy to Server') {
         steps {
             script {
