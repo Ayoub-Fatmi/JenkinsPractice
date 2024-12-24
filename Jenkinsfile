@@ -62,23 +62,27 @@ pipeline {
 //             }
 //         }
 //     }
-        stage('Deploy to Server') {
-            steps {
-                script {
-                    echo 'Deploying to server...'
+    stage('Deploy to Server') {
+        steps {
+            script {
+                echo 'Deploying to server...'
 
-                    withCredentials([sshUserPrivateKey(credentialsId: 'Deploy-ssh-key', keyFileVariable: 'SSH_KEY')]) {
-                        bat '''
-                            echo "Deploying Docker container on the server..."
-                            echo "SSH Key Path: $env:SSH_KEY"
+                // Manually specify the private key path for debugging
+                def sshKeyPath = 'C:\\Users\\Administrator\\.ssh\\id_rsa'
 
-                            // Use the private key to authenticate using ssh
-                            powershell -Command "ssh -i $env:SSH_KEY %SERVER_USER%@%SERVER_IP% 'docker pull %DOCKER_IMAGE% && docker run -d -p 8080:8080 %DOCKER_IMAGE%'"
-                        '''
-                    }
-                }
+                // Print the manually defined SSH key path
+                echo "SSH Key Path: $sshKeyPath"
+
+                bat '''
+                    echo "Deploying Docker container on the server..."
+
+                    // Use manually defined SSH key path
+                    powershell -Command "ssh -i C:\\Users\\Administrator\\.ssh\\id_rsa root@49.13.218.22 'docker pull fatmiayoub17/jenkinstp:latest && docker run -d -p 8080:8080 fatmiayoub17/jenkinstp:latest'"
+                '''
             }
-       }
+        }
+    }
+
 }
 
 
