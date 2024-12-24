@@ -46,43 +46,41 @@ pipeline {
                 }
             }
         }
+
 //         stage('Deploy to Server') {
 //             steps {
 //                 script {
 //                     echo 'Deploying to server...'
 //
-//                     // Use the SSH credentials to log in to the server and deploy the Docker container
-//                     sshagent(['deploy-ssh-credentials']) {
-//                         // Run SSH commands on your Linux server from Windows Jenkins
-//                         bat 'ssh root@49.13.229.11 "docker pull fatmiayoub17/calculator:latest"'
-//
-//                         // Stop any running container (if needed)
-//                         bat 'ssh root@49.13.229.11 "docker stop calculator || true"'
-//
-//                         // Remove the old container (if needed)
-//                         bat 'ssh root@49.13.229.11 "docker rm calculator || true"'
-//
-//                         // Run the new container on the server
-//                         bat 'ssh root@49.13.229.11 "docker run -d -p 8080:8080 --name calculator fatmiayoub17/calculator:latest"'
+//                     sshagent(credentials: [SSH_CREDENTIALS_ID]) {
+//                         bat '''
+//                             echo "Deploying Docker container on the server..."
+//                             powershell -Command "ssh %SERVER_USER%@%SERVER_IP% 'docker pull %DOCKER_IMAGE% && docker run -d -p 8080:8080 %DOCKER_IMAGE%'"
+//                         '''
 //                     }
 //                 }
 //             }
 //         }
+//     }
         stage('Deploy to Server') {
             steps {
                 script {
                     echo 'Deploying to server...'
 
-                    sshagent(credentials: [SSH_CREDENTIALS_ID]) {
+                    // Use withCredentials to directly inject the private key
+                    withCredentials([sshUserPrivateKey(credentialsId: 'SSH_CREDENTIALS_ID', keyFileVariable: 'SSH_KEY')]) {
                         bat '''
                             echo "Deploying Docker container on the server..."
-                            powershell -Command "ssh %SERVER_USER%@%SERVER_IP% 'docker pull %DOCKER_IMAGE% && docker run -d -p 8080:8080 %DOCKER_IMAGE%'"
+
+                            // Use the private key to authenticate using ssh
+                            powershell -Command "ssh -i $env:SSH_KEY %SERVER_USER%@%SERVER_IP% 'docker pull %DOCKER_IMAGE% && docker run -d -p 8080:8080 %DOCKER_IMAGE%'"
                         '''
                     }
                 }
             }
-        }
-    }
+       }
+}
+
 
     post {
         success {
