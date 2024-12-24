@@ -62,26 +62,45 @@ pipeline {
 //             }
 //         }
 //     }
-    stage('Deploy to Server') {
+    stage('Hello to Server') {
         steps {
             script {
                 echo 'Deploying to server...'
 
-                // Manually specify the private key path for debugging
+                // Temporarily use the path to the private key directly
                 def sshKeyPath = 'C:\\Users\\Administrator\\.ssh\\id_rsa'
 
                 // Print the manually defined SSH key path
                 echo "SSH Key Path: $sshKeyPath"
 
+                // Run the SSH command directly using the private key path
                 bat '''
                     echo "Deploying Docker container on the server..."
-
-                    // Use manually defined SSH key path
-                    powershell -Command "ssh -i C:\\Users\\Administrator\\.ssh\\id_rsa root@49.13.218.22 'docker pull fatmiayoub17/jenkinstp:latest && docker run -d -p 8085:8080 fatmiayoub17/jenkinstp:latest'"
+                    powershell -Command "ssh -vvv -i C:\\Users\\Administrator\\.ssh\\id_rsa root@49.13.218.22 'echo hello'"
                 '''
             }
         }
     }
+    stage('Deploy to Server') {
+        steps {
+            script {
+                echo 'Deploying to server...'
+
+                // Temporarily use the path to the private key directly
+                def sshKeyPath = 'C:\\Users\\Administrator\\.ssh\\id_rsa'
+
+                // Print the manually defined SSH key path
+                echo "SSH Key Path: $sshKeyPath"
+
+                // Run the SSH command directly using the private key path
+                bat '''
+                    echo "Deploying Docker container on the server..."
+                    powershell -Command "ssh -vvv -i C:\\Users\\Administrator\\.ssh\\id_rsa root@49.13.218.22 'docker pull fatmiayoub17/jenkinstp:latest && docker run -d -p 8080:8080 fatmiayoub17/jenkinstp:latest'"
+                '''
+            }
+        }
+    }
+
 
 }
 
