@@ -77,7 +77,7 @@ pipeline {
                     echo "Deploying Docker container on the server..."
 
                     // Use manually defined SSH key path
-                    powershell -Command "ssh -i C:\\Users\\Administrator\\.ssh\\id_rsa root@49.13.218.22 'docker pull fatmiayoub17/jenkinstp:latest && docker run -d -p 8080:8080 fatmiayoub17/jenkinstp:latest'"
+                    powershell -Command "ssh -i C:\\Users\\Administrator\\.ssh\\id_rsa root@49.13.218.22 'docker pull fatmiayoub17/jenkinstp:latest && docker run -d -p 8085:8080 fatmiayoub17/jenkinstp:latest'"
                 '''
             }
         }
