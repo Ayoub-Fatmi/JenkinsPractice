@@ -54,7 +54,7 @@ pipeline {
                     // Use the SSH credentials to log in to the server and deploy the Docker container
                     sshagent(['Deploy-ssh-key']) {
                         // Use 'sh' to run the SSH command from Windows Jenkins
-                        sh 'ssh root@49.13.218.22 "echo hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"'
+                        sh 'ssh -o StrictHostKeyChecking=no root@49.13.218.22 "echo hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"'
                     }
                 }
             }
