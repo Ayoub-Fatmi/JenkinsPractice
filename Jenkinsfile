@@ -46,7 +46,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to Server') {
+        stage('Hello to Server') {
             steps {
                 script {
                     echo 'Deploying to server...'
@@ -123,7 +123,7 @@ pipeline {
 //     }
 
 
-}
+    }
 
 
     post {
