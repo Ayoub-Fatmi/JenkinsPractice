@@ -52,9 +52,11 @@ pipeline {
                     echo 'Deploying to server...'
 
                     // Use the SSH credentials to log in to the server and deploy the Docker container
-                    sshagent(['Deploy-ssh-key']) {  // Replace with your credentials ID
-                        // Execute SSH commands
-                        sh 'ssh root@49.13.218.22 "echo hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"'
+                    sshagent(['Deploy-ssh-key']) {
+                        // Disable the sandbox for this step
+                        unsandboxed {
+                            sh 'ssh -o StrictHostKeyChecking=no root@49.13.218.22 "echo hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"'
+                        }
                     }
                 }
             }
