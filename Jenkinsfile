@@ -5,7 +5,7 @@ pipeline {
         DOCKER_IMAGE = 'fatmiayoub17/jenkinstp:latest'
         DOCKER_USERNAME = 'fatmiayoub17'
         DOCKER_PASSWORD = 'skVCSNTBw'
-        SSH_CREDENTIALS_ID = 'Deploy-ssh-key'
+        SSH_CREDENTIALS_ID = 'Deployssh'
         SERVER_IP = '49.13.218.22'
         SERVER_USER = 'root'
     }
@@ -42,6 +42,16 @@ pipeline {
                     sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
                     echo 'Pushing Docker image to DockerHub...'
                     sh "docker push ${DOCKER_IMAGE}"
+                }
+            }
+        }
+        stage('Connect to Server') {
+            steps {
+                sshagent(credentials: ["${SSH_CREDENTIALS_ID}"]) {
+                    script {
+                        echo "Connecting to server ${SERVER_IP}..."
+                        sh "ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} 'echo hello'"
+                    }
                 }
             }
         }
