@@ -32,8 +32,7 @@ pipeline {
                 withSonarQubeEnv('mySonar') {
                     sh '''
                     chmod +x ./mvnw
-                    ./mvnw clean compile
-                    ./mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar \
+                    ./mvnw compile org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar \
                         -Dsonar.java.binaries=target
                     '''
                 }
