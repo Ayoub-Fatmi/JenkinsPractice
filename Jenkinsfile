@@ -61,24 +61,17 @@ pipeline {
                     script {
                         echo "Deploying application on server ${SERVER_IP}..."
                         sh """
-                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} << EOF
-                        echo "Pulling Docker image from DockerHub..."
-                        docker pull ${DOCKER_IMAGE}
-
-                        echo "Stopping and removing any existing container..."
-                        docker stop app-container || true
-                        docker rm app-container || true
-
-                        echo "Starting a new container..."
-                        docker run -d --name app-container -p 80:8080 ${DOCKER_IMAGE}
-
-                        echo "Deployment completed successfully."
-                        EOF
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} \
+                        "docker pull ${DOCKER_IMAGE} && \
+                         docker stop app-container || true && \
+                         docker rm app-container || true && \
+                         docker run -d --name app-container -p 80:8080 ${DOCKER_IMAGE}"
                         """
                     }
                 }
             }
         }
+
     }
 
     post {
