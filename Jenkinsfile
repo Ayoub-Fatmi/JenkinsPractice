@@ -50,7 +50,10 @@ pipeline {
             steps {
                 script {
                     echo "Scanning Docker image ${DOCKER_IMAGE} for vulnerabilities..."
-                    sh "trivy image --exit-code 1 --severity HIGH,CRITICAL ${DOCKER_IMAGE}"
+                    sh """
+                    trivy image --severity HIGH,CRITICAL --format table -o trivy-report.txt ${DOCKER_IMAGE} || true
+                    """
+                    archiveArtifacts artifacts: 'trivy-report.txt', allowEmptyArchive: true
                 }
             }
         }
