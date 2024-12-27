@@ -55,6 +55,30 @@ pipeline {
                 }
             }
         }
+        stage('Deploy to Server') {
+            steps {
+                sshagent(credentials: ["${SSH_CREDENTIALS_ID}"]) {
+                    script {
+                        echo "Deploying application on server ${SERVER_IP}..."
+                        sh """
+                        ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} << EOF
+                        echo "Pulling Docker image from DockerHub..."
+                        docker pull ${DOCKER_IMAGE}
+
+                        echo "Stopping and removing any existing container..."
+                        docker stop app-container || true
+                        docker rm app-container || true
+
+                        echo "Starting a new container..."
+                        docker run -d --name app-container -p 80:8080 ${DOCKER_IMAGE}
+
+                        echo "Deployment completed successfully."
+                        EOF
+                        """
+                    }
+                }
+            }
+        }
     }
 
     post {
