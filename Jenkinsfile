@@ -46,6 +46,14 @@ pipeline {
                 }
             }
         }
+        stage('Scan Docker Image') {
+            steps {
+                script {
+                    echo "Scanning Docker image ${DOCKER_IMAGE} for vulnerabilities..."
+                    sh "trivy image --exit-code 1 --severity HIGH,CRITICAL ${DOCKER_IMAGE}"
+                }
+            }
+        }
         stage('Push Docker Image to DockerHub') {
             steps {
                 script {
@@ -53,16 +61,6 @@ pipeline {
                     sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
                     echo 'Pushing Docker image to DockerHub...'
                     sh "docker push ${DOCKER_IMAGE}"
-                }
-            }
-        }
-        stage('Connect to Server') {
-            steps {
-                sshagent(credentials: ["${SSH_CREDENTIALS_ID}"]) {
-                    script {
-                        echo "Connecting to server ${SERVER_IP}..."
-                        sh "ssh -o StrictHostKeyChecking=no ${SERVER_USER}@${SERVER_IP} 'echo hello'"
-                    }
                 }
             }
         }
