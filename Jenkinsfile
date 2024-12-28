@@ -57,11 +57,23 @@ pipeline {
                 }
             }
         }
+//         stage('Push Docker Image to DockerHub') {
+//             steps {
+//                 script {
+//                     echo 'Logging in to DockerHub...'
+//                     sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
+//                     echo 'Pushing Docker image to DockerHub...'
+//                     sh "docker push ${DOCKER_IMAGE}"
+//                 }
+//             }
+//         }
         stage('Push Docker Image to DockerHub') {
             steps {
                 script {
                     echo 'Logging in to DockerHub...'
-                    sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
+                    withCredentials([string(credentialsId: 'DOCKER_TOKEN', variable: 'DOCKER_TOKEN')]) {
+                        sh "echo ${DOCKER_TOKEN} | docker login -u ${DOCKER_USERNAME} --password-stdin"
+                    }
                     echo 'Pushing Docker image to DockerHub...'
                     sh "docker push ${DOCKER_IMAGE}"
                 }
