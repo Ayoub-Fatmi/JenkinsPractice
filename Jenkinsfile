@@ -4,7 +4,6 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'fatmiayoub17/jenkinstp:latest'
         DOCKER_USERNAME = 'fatmiayoub17'
-        DOCKER_PASSWORD = 'skVCSNTBw'
         SSH_CREDENTIALS_ID = 'Deployssh'
         SERVER_IP = '49.13.218.22'
         SERVER_USER = 'root'
@@ -57,16 +56,6 @@ pipeline {
                 }
             }
         }
-//         stage('Push Docker Image to DockerHub') {
-//             steps {
-//                 script {
-//                     echo 'Logging in to DockerHub...'
-//                     sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
-//                     echo 'Pushing Docker image to DockerHub...'
-//                     sh "docker push ${DOCKER_IMAGE}"
-//                 }
-//             }
-//         }
         stage('Push Docker Image to DockerHub') {
             steps {
                 script {
@@ -95,15 +84,9 @@ pipeline {
                 }
             }
         }
-
     }
-
     post {
-        success {
-            echo 'Pipeline completed successfully.'
-        }
-        failure {
-            echo 'Pipeline failed.'
-        }
+        success { echo 'Pipeline completed successfully.' }
+        failure { echo 'Pipeline failed.' }
     }
 }
