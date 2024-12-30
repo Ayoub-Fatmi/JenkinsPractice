@@ -5,7 +5,6 @@ pipeline {
         DOCKER_IMAGE = 'fatmiayoub17/jenkinstp:latest'
         DOCKER_USERNAME = 'fatmiayoub17'
         SSH_CREDENTIALS_ID = 'Deployssh'
-        SONARQUBE_ENV = 'mySonar'
         SERVER_IP = '49.13.218.22'
         SERVER_USER = 'root'
     }
@@ -29,7 +28,7 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv("${SONARQUBE_ENV}") {
+                withSonarQubeEnv('mySonar') {
                     sh '''
                     chmod +x ./mvnw
                     ./mvnw compile org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar \
@@ -61,7 +60,7 @@ pipeline {
             steps {
                 script {
                     echo 'Logging in to DockerHub...'
-                    withCredentials([string(credentialsId: 'Docker_TOKEN', variable: 'DOCKER_TOKEN')]) {
+                    withCredentials([string(credentialsId: 'DOCKER_TOKEN', variable: 'DOCKER_TOKEN')]) {
                         sh "echo ${DOCKER_TOKEN} | docker login -u ${DOCKER_USERNAME} --password-stdin"
                     }
                     echo 'Pushing Docker image to DockerHub...'
