@@ -78,7 +78,7 @@ pipeline {
                         "docker pull ${DOCKER_IMAGE} && \
                          docker stop app-container || true && \
                          docker rm app-container || true && \
-                         docker run -d --name app-container -p 80:8080 ${DOCKER_IMAGE}"
+                         docker run -d --name app-container -p 8080:8080 ${DOCKER_IMAGE}"
                         """
                     }
                 }
