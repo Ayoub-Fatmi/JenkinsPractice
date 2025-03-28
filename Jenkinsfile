@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'fatmiayoub17/jenkinstp:latest'
-        DOCKER_USERNAME = 'fatmiayoub17'
-        SSH_CREDENTIALS_ID = 'Deployssh'
-        SERVER_IP = '49.13.218.22'
+        DOCKER_IMAGE = 'fatmiayoub17/jenkinstp:latest' //ToEdit
+        DOCKER_USERNAME = 'myUserName' //ToEdit
+        SSH_CREDENTIALS_ID = 'DeploysshCred' //ToEdit
+        SERVER_IP = '00.00.00.00' //ToEdit
         SERVER_USER = 'root'
     }
 
